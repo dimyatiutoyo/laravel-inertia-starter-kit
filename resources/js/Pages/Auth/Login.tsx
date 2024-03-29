@@ -1,4 +1,4 @@
-import { useEffect, FormEventHandler } from "react";
+import { useEffect, FormEventHandler, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Label } from "@/Components/ui/label";
@@ -12,6 +12,7 @@ import {
 } from "@/Components/ui/card";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login({
   status,
@@ -20,6 +21,7 @@ export default function Login({
   status?: string;
   canResetPassword: boolean;
 }) {
+  const [showPassword, setShowPassword] = useState(false);
   const { data, setData, post, processing, errors, reset } = useForm({
     email: "",
     password: "",
@@ -67,13 +69,31 @@ export default function Login({
 
             <div className="mt-4">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={data.password}
-                onChange={(e) => setData("password", e.target.value)}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={data.password}
+                  onChange={(e) => setData("password", e.target.value)}
+                />
+                <div className="absolute flex items-center right-0 top-0">
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowPassword(!showPassword);
+                    }}
+                    size="icon"
+                    variant="ghost"
+                  >
+                    {showPassword ? (
+                      <Eye className="w-5" />
+                    ) : (
+                      <EyeOff className="w-5" />
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
 
             <div className="block mt-4">
@@ -92,9 +112,9 @@ export default function Login({
               {canResetPassword && (
                 <Link
                   href={route("password.request")}
-                  className="underline text-sm text-neutral-500 dark:text-neutral-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                  className="underline text-sm text-neutral-600 dark:text-neutral-400 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 >
-                  Lupa passwordmu?
+                  Lupa password?
                 </Link>
               )}
 
@@ -108,11 +128,11 @@ export default function Login({
           </form>
         </CardContent>
         <CardFooter>
-          <div className="text-foreground text-sm text-right w-full">
-            <span>Tidak punya akun?</span>
+          <div className="text-neutral-600 dark:text-neutral-400 text-sm text-right w-full">
+            <span>Belum punya akun?</span>
             <Link
               href={route("register")}
-              className="underline ml-2"
+              className="underline ml-1"
             >
               Buat akun
             </Link>

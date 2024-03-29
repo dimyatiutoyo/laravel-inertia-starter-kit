@@ -10,7 +10,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
+  navigationMenuTriggerStyle,
 } from "@/Components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 function NavbarResposive() {
   return (
@@ -22,9 +24,24 @@ function NavbarResposive() {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link href={route("profile.edit")}>
-                    <NavigationMenuLink active>Link</NavigationMenuLink>
-                  </Link>
+                  <NavigationMenuLink
+                    active={true}
+                    asChild
+                    className={cn(
+                      "text-foreground",
+                      navigationMenuTriggerStyle()
+                    )}
+                  >
+                    <Link href={route("profile.edit")}>Profile</Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    asChild
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    <Link href={route("profile.edit")}>Link</Link>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
+import { EyeOff } from "lucide-react";
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -82,7 +83,6 @@ export default function Register() {
 
             <div className="mt-4">
               <Label htmlFor="password_confirmation">Konfirmasi Password</Label>
-
               <Input
                 id="password_confirmation"
                 name="password_confirmation"
