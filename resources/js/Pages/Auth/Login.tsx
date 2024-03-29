@@ -12,7 +12,7 @@ import {
 } from "@/Components/ui/card";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Button } from "@/Components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
 export default function Login({
   status,
@@ -37,7 +37,11 @@ export default function Login({
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
 
-    post(route("login"));
+    post(route("login"), {
+      onError: (errors) => {
+        console.log(errors);
+      },
+    });
   };
 
   return (
@@ -65,6 +69,12 @@ export default function Login({
                 value={data.email}
                 onChange={(e) => setData("email", e.target.value)}
               />
+
+              {errors.email && (
+                <div className="text-red-600 text-xs mt-2 font-semibold">
+                  {errors.email}
+                </div>
+              )}
             </div>
 
             <div className="mt-4">
@@ -93,6 +103,11 @@ export default function Login({
                     )}
                   </Button>
                 </div>
+                {errors.password && (
+                  <div className="text-red-600 text-xs mt-2 font-semibold">
+                    {errors.password}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -122,6 +137,9 @@ export default function Login({
                 className="ms-4"
                 disabled={processing}
               >
+                {processing && (
+                  <LoaderCircle className="w-5 mr-2 animate-spin" />
+                )}
                 Log in
               </Button>
             </div>
