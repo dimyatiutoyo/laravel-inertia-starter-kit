@@ -21,34 +21,30 @@ export default function Edit({
       }
     >
       <Head title="Profile" />
+
       <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-12 gap-4">
-          <ul className="col-span-3 rounded-lg">
-            <li className="bg-neutral-500 bg-opacity-5 hover:bg-opacity-10 rounded-lg overflow-hidden">
-              <a
-                href="#"
-                className="w-full inline-block px-4 py-3 text-foreground"
-              >
-                <KeyRound className="h-5 w-5 inline-block mr-2" />
-                Authentication
-              </a>
-            </li>
-          </ul>
-          <div className="col-span-9 flex flex-col gap-6">
-            <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
+          <div className="grid grid-rows-1 md:grid-cols-12 gap-4">
+            <ul className="row-span-1 md:col-span-3 rounded-lg">
+              <li className="bg-neutral-500 bg-opacity-5 hover:bg-opacity-10 rounded-lg overflow-hidden">
+                <a
+                  href="#"
+                  className="w-full inline-block px-2 md:px-4 py-1 md:py-3 text-foreground text-xs md:text-sm"
+                >
+                  <KeyRound className="h-4 md:h-5 w-4 md:w-5 inline-block mr-2" />
+                  Authentication
+                </a>
+              </li>
+            </ul>
+            <div className="row-span-1 md:col-span-9 flex flex-col gap-6">
               <UpdateProfileInformationForm
                 mustVerifyEmail={mustVerifyEmail}
                 status={status}
-                className="max-w-xl"
               />
-            </div>
 
-            <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-              <UpdatePasswordForm className="max-w-xl" />
-            </div>
+              <UpdatePasswordForm />
 
-            <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-              <DeleteUserForm className="max-w-xl" />
+              <DeleteUserForm />
             </div>
           </div>
         </div>

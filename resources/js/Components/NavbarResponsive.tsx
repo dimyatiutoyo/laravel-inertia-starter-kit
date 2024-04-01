@@ -32,8 +32,9 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import AvatarButton from "./AvatarButton";
+import { MenuItems } from "@/types/menu_items";
 
-const menuItems = [
+export const menuItems: MenuItems[] = [
   {
     name: "Dashboard",
     href: route("dashboard"),
@@ -70,7 +71,7 @@ export default function NavbarResposive({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "sticky top-0 backdrop-blur-md border-b border-b-neutral-100 dark:border-b-neutral-900",
+        "sticky top-0 backdrop-blur-md border-b border-b-neutral-400 border-opacity-30 z-10",
         className
       )}
     >
@@ -78,10 +79,10 @@ export default function NavbarResposive({ className }: { className?: string }) {
         <div className="h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <div className="flex gap-2">
-              <MobileDrawer className="sm:hidden" />
-              <ApplicationLogo className="hidden sm:block h-9 w-auto fill-current text-foreground" />
+              <MobileDrawer className="md:hidden" />
+              <ApplicationLogo className="hidden md:block h-9 w-auto fill-current text-foreground" />
             </div>
-            <NavigationMenu className="hidden sm:block">
+            {/* <NavigationMenu className="hidden md:block">
               <NavigationMenuList className="gap-0">
                 {menuItems.map((item, index) => (
                   <NavigationMenuItem key={item.name}>
@@ -100,7 +101,7 @@ export default function NavbarResposive({ className }: { className?: string }) {
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
-            </NavigationMenu>
+            </NavigationMenu> */}
           </div>
           <div className="flex gap-1 items-center">
             <ModeToggle />

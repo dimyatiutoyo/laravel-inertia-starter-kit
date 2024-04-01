@@ -14,7 +14,10 @@ import {
 function AvatarButton() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger
+        asChild
+        className="cursor-pointer"
+      >
         <Avatar className="w-8 h-8">
           <AvatarImage
             src="https://github.com/shadcn.png"
@@ -41,6 +44,18 @@ function AvatarButton() {
             className="cursor-pointer"
           >
             <Link href={route("profile.edit")}>Profile</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            asChild
+            className="cursor-pointer"
+          >
+            <Link
+              href={route("logout")}
+              method="post"
+              as="button"
+            >
+              Logout
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

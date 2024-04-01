@@ -1,10 +1,17 @@
 import { useRef, FormEventHandler } from "react";
-import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/Components/ui/card";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
+import { Loader } from "lucide-react";
 
 export default function UpdatePasswordForm({
   className = "",
@@ -42,100 +49,97 @@ export default function UpdatePasswordForm({
   };
 
   return (
-    <section className={className}>
-      <header>
-        <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-          Update Password
-        </h2>
-
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Ensure your account is using a long, random password to stay secure.
-        </p>
-      </header>
-
-      <form
-        onSubmit={updatePassword}
-        className="mt-6 space-y-6"
-      >
-        <div>
-          <InputLabel
-            htmlFor="current_password"
-            value="Current Password"
-          />
-
-          <TextInput
-            id="current_password"
-            ref={currentPasswordInput}
-            value={data.current_password}
-            onChange={(e) => setData("current_password", e.target.value)}
-            type="password"
-            className="mt-1 block w-full"
-            autoComplete="current-password"
-          />
-
-          <InputError
-            message={errors.current_password}
-            className="mt-2"
-          />
-        </div>
-
-        <div>
-          <InputLabel
-            htmlFor="password"
-            value="New Password"
-          />
-
-          <TextInput
-            id="password"
-            ref={passwordInput}
-            value={data.password}
-            onChange={(e) => setData("password", e.target.value)}
-            type="password"
-            className="mt-1 block w-full"
-            autoComplete="new-password"
-          />
-
-          <InputError
-            message={errors.password}
-            className="mt-2"
-          />
-        </div>
-
-        <div>
-          <InputLabel
-            htmlFor="password_confirmation"
-            value="Confirm Password"
-          />
-
-          <TextInput
-            id="password_confirmation"
-            value={data.password_confirmation}
-            onChange={(e) => setData("password_confirmation", e.target.value)}
-            type="password"
-            className="mt-1 block w-full"
-            autoComplete="new-password"
-          />
-
-          <InputError
-            message={errors.password_confirmation}
-            className="mt-2"
-          />
-        </div>
-
-        <div className="flex items-center gap-4">
-          <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-          <Transition
-            show={recentlySuccessful}
-            enter="transition ease-in-out"
-            enterFrom="opacity-0"
-            leave="transition ease-in-out"
-            leaveTo="opacity-0"
+    <div className={className}>
+      <Card className="dark:bg-neutral-500 dark:bg-opacity-5">
+        <CardHeader>
+          <CardTitle>Update Password</CardTitle>
+          <CardDescription>
+            Ensure your account is using a long, random password to stay secure.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            onSubmit={updatePassword}
+            className="space-y-4"
           >
-            <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-          </Transition>
-        </div>
-      </form>
-    </section>
+            <div className="space-y-1">
+              <Label htmlFor="current_password">Current Password</Label>
+              <Input
+                id="current_password"
+                name="current_password"
+                type="password"
+                ref={currentPasswordInput}
+                value={data.current_password}
+                className="max-w-lg"
+                onChange={(e) => setData("current_password", e.target.value)}
+              />
+              {errors.current_password && (
+                <div className="text-red-600 text-xs mt-2 font-semibold">
+                  {errors.current_password}
+                </div>
+              )}
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="password">New Password</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={data.password}
+                className="max-w-lg"
+                onChange={(e) => setData("password", e.target.value)}
+              />
+              {errors.password && (
+                <div className="text-red-600 text-xs mt-2 font-semibold">
+                  {errors.password}
+                </div>
+              )}
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="password_confirmation">Confirm Password</Label>
+              <Input
+                id="password_confirmation"
+                name="password_confirmation"
+                type="password"
+                value={data.password_confirmation}
+                className="max-w-lg"
+                onChange={(e) =>
+                  setData("password_confirmation", e.target.value)
+                }
+              />
+              {errors.password_confirmation && (
+                <div className="text-red-600 text-xs mt-2 font-semibold">
+                  {errors.password_confirmation}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Button
+                type="submit"
+                disabled={processing}
+              >
+                {processing ? (
+                  <Loader className="w-5 h-5 animate-spin mr-2" />
+                ) : null}
+                Save
+              </Button>
+
+              <Transition
+                show={recentlySuccessful}
+                enter="transition ease-in-out"
+                enterFrom="opacity-0"
+                leave="transition ease-in-out"
+                leaveTo="opacity-0"
+              >
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Saved.
+                </p>
+              </Transition>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

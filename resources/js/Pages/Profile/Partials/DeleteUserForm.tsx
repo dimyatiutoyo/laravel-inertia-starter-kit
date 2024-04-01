@@ -6,6 +6,26 @@ import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/Components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from "@/Components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { Button } from "@/Components/ui/button";
+import { Label } from "@/Components/ui/label";
+import { Input } from "@/Components/ui/input";
+import { Loader } from "lucide-react";
 
 export default function DeleteUserForm({
   className = "",
@@ -48,76 +68,73 @@ export default function DeleteUserForm({
   };
 
   return (
-    <section className={`space-y-6 ${className}`}>
-      <header>
-        <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-          Delete Account
-        </h2>
-
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Once your account is deleted, all of its resources and data will be
-          permanently deleted. Before deleting your account, please download any
-          data or information that you wish to retain.
-        </p>
-      </header>
-
-      <DangerButton onClick={confirmUserDeletion}>Delete Account</DangerButton>
-
-      <Modal
-        show={confirmingUserDeletion}
-        onClose={closeModal}
-      >
-        <form
-          onSubmit={deleteUser}
-          className="p-6"
-        >
-          <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-            Are you sure you want to delete your account?
-          </h2>
-
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+    <div className={className}>
+      <Card className="dark:bg-neutral-500 dark:bg-opacity-5">
+        <CardHeader>
+          <CardTitle>Delete Account</CardTitle>
+          <CardDescription>
             Once your account is deleted, all of its resources and data will be
-            permanently deleted. Please enter your password to confirm you would
-            like to permanently delete your account.
-          </p>
-
-          <div className="mt-6">
-            <InputLabel
-              htmlFor="password"
-              value="Password"
-              className="sr-only"
-            />
-
-            <TextInput
-              id="password"
-              type="password"
-              name="password"
-              ref={passwordInput}
-              value={data.password}
-              onChange={(e) => setData("password", e.target.value)}
-              className="mt-1 block w-3/4"
-              isFocused
-              placeholder="Password"
-            />
-
-            <InputError
-              message={errors.password}
-              className="mt-2"
-            />
-          </div>
-
-          <div className="mt-6 flex justify-end">
-            <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
-
-            <DangerButton
-              className="ms-3"
-              disabled={processing}
-            >
-              Delete Account
-            </DangerButton>
-          </div>
-        </form>
-      </Modal>
-    </section>
+            permanently deleted. Before deleting your account, please download
+            any data or information that you wish to retain.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="destructive">Delete Account</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  Are you sure you want to delete your account?
+                </DialogTitle>
+                <DialogDescription>
+                  Once your account is deleted, all of its resources and data
+                  will be permanently deleted. Please enter your password to
+                  confirm you would like to permanently delete your account.
+                </DialogDescription>
+              </DialogHeader>
+              <form
+                onSubmit={deleteUser}
+                className="space-y-4"
+              >
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    ref={passwordInput}
+                    value={data.password}
+                    onChange={(e) => setData("password", e.target.value)}
+                    autoFocus
+                    required
+                  />
+                  {errors.password && (
+                    <div className="text-red-600 text-xs mt-2 font-semibold">
+                      {errors.password}
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-1 justify-end">
+                  <DialogClose asChild>
+                    <Button variant="ghost">Cancel</Button>
+                  </DialogClose>
+                  <Button
+                    variant="destructive"
+                    disabled={processing}
+                  >
+                    {processing ? (
+                      <Loader className="w-5 h-5 animate-spin mr-2" />
+                    ) : null}
+                    Yes, Delete
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
