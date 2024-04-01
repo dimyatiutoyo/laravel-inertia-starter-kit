@@ -34,40 +34,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import AvatarButton from "./AvatarButton";
 import { MenuItems } from "@/types/menu_items";
 
-export const menuItems: MenuItems[] = [
-  {
-    name: "Dashboard",
-    href: route("dashboard"),
-    icon: HomeIcon,
-    current: false,
-  },
-  {
-    name: "Team",
-    href: route("profile.edit"),
-    icon: UsersIcon,
-    current: false,
-  },
-  {
-    name: "Projects",
-    href: route("profile.edit"),
-    icon: FolderIcon,
-    current: false,
-  },
-  {
-    name: "Calendar",
-    href: route("profile.edit"),
-    icon: CalendarIcon,
-    current: false,
-  },
-  {
-    name: "Settings",
-    href: route("profile.edit"),
-    icon: CogIcon,
-    current: false,
-  },
-];
-
-export default function NavbarResposive({ className }: { className?: string }) {
+export default function NavbarResposive({
+  className,
+  menuItems = [],
+}: {
+  className?: string;
+  menuItems: MenuItems[];
+}) {
   return (
     <div
       className={cn(
@@ -76,7 +49,7 @@ export default function NavbarResposive({ className }: { className?: string }) {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="h-16 flex items-center justify-between">
+        <div className="h-12 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <div className="flex gap-2">
               <MobileDrawer className="md:hidden" />
