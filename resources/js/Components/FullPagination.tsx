@@ -13,19 +13,21 @@ import { Link } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { range } from "@/lib/range";
+import { cn } from "@/lib/utils";
 
 function FullPagination({
   keyData,
   links,
   siblingCount = 1,
+  className = "",
 }: {
   keyData: string;
   siblingCount?: number;
   links: MetaLink[];
+  className?: string;
 }) {
   const activeLink = links.find((link) => link.active);
   const activePageNumber = parseInt(activeLink!.label);
-  const activeIndex = activePageNumber - 1;
   const indexShouldRender = range(
     activePageNumber - siblingCount,
     activePageNumber + (siblingCount + 1)
@@ -42,21 +44,25 @@ function FullPagination({
     (link) => parseInt(link.label) > activePageNumber
   ).length;
   return (
-    <Pagination className="my-2">
+    <Pagination className={className}>
       <PaginationContent>
-        {links[0].url && (
-          <PaginationItem>
-            <Link
-              only={[keyData]}
-              href={links[0].url}
+        <PaginationItem>
+          <Link
+            preserveState
+            disabled={!links[0].url}
+            className={!links[0].url ? "cursor-not-allowed" : ""}
+            only={[keyData]}
+            href={links[0].url || "#"}
+          >
+            <Button
+              disabled={!links[0].url}
+              variant="outline"
             >
-              <Button variant="outline">
-                <ChevronLeft className="w-5" />
-                Previous
-              </Button>
-            </Link>
-          </PaginationItem>
-        )}
+              <ChevronLeft className="w-5" />
+              Previous
+            </Button>
+          </Link>
+        </PaginationItem>
         {prevLinksCount > siblingCount && (
           <PaginationItem>
             <PaginationEllipsis />
@@ -72,6 +78,7 @@ function FullPagination({
                   variant={link.active ? "default" : "outline"}
                 >
                   <Link
+                    preserveState
                     only={[keyData]}
                     href={link.url}
                   >
@@ -88,18 +95,22 @@ function FullPagination({
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        {links[links.length - 1].url && (
-          <PaginationItem>
-            <Link
-              only={[keyData]}
-              href={links[links.length - 1].url || "#"}
+        <PaginationItem>
+          <Link
+            preserveState
+            disabled={!links[links.length - 1].url}
+            className={!links[links.length - 1].url ? "cursor-not-allowed" : ""}
+            only={[keyData]}
+            href={links[links.length - 1].url || "#"}
+          >
+            <Button
+              disabled={!links[links.length - 1].url}
+              variant="outline"
             >
-              <Button variant="outline">
-                Next <ChevronRight className="w-5" />
-              </Button>
-            </Link>
-          </PaginationItem>
-        )}
+              Next <ChevronRight className="w-5" />
+            </Button>
+          </Link>
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   );

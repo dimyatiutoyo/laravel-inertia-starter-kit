@@ -13,8 +13,17 @@ class UserController extends Controller
    */
   public function index()
   {
+    Inertia::share([
+      'filters' => request()->all('search'),
+    ]);
     return Inertia::render('Users/Index', [
-      'users' => fn () => UserResource::collection(\App\Models\User::paginate(10))
+      'users' => function () {
+        $query = \App\Models\User::when(request('search'), function ($query, $search) {
+          return $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%');
+        });
+        return UserResource::collection($query->paginate(10)->withQueryString());
+      }
     ]);
   }
 
