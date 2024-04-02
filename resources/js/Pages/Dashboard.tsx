@@ -121,7 +121,7 @@ Dashboard.layout = (page: ReactElement<PageProps>) => {
     <AuthenticatedLayout
       user={page.props.auth.user}
       header={
-        <h2 className="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 className="font-semibold text-4xl text-gray-800 dark:text-gray-200 leading-tight">
           Dashboard
         </h2>
       }

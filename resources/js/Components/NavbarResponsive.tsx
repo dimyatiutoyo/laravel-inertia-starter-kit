@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "./ApplicationLogo";
 import { ModeToggle } from "./ui/mode-toggle";
 import {
@@ -33,6 +33,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import AvatarButton from "./AvatarButton";
 import { MenuItems } from "@/types/menu_items";
+import { PageProps, User } from "@/types";
+import { appendFile } from "fs";
 
 export default function NavbarResposive({
   className,
@@ -41,6 +43,8 @@ export default function NavbarResposive({
   className?: string;
   menuItems: MenuItems[];
 }) {
+  const page = usePage<PageProps<{ appName: string }>>();
+
   return (
     <div
       className={cn(
@@ -49,10 +53,13 @@ export default function NavbarResposive({
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="h-12 flex items-center justify-between">
+        <div className="h-14 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <div className="flex gap-2">
-              <MobileDrawer className="md:hidden" />
+              <MobileDrawer
+                appName={page.props.appName}
+                className="md:hidden"
+              />
               <ApplicationLogo className="hidden md:block h-9 w-auto fill-current text-foreground" />
             </div>
             {/* <NavigationMenu className="hidden md:block">
@@ -86,7 +93,14 @@ export default function NavbarResposive({
   );
 }
 
-function MobileDrawer({ className }: { className?: string }) {
+function MobileDrawer({
+  className,
+  appName,
+}: {
+  className?: string;
+  appName: string;
+}) {
+  console.log(appName);
   return (
     <Sheet>
       <SheetTrigger
@@ -107,7 +121,7 @@ function MobileDrawer({ className }: { className?: string }) {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <ApplicationLogo className="h-6 w-auto fill-current text-foreground" />
-            <span className="text-xl">crispy.net</span>
+            <span className="text-xl">{appName}</span>
           </SheetTitle>
         </SheetHeader>
       </SheetContent>

@@ -41,13 +41,13 @@ function AvatarButton() {
           </DropdownMenuItem>
           <DropdownMenuItem
             asChild
-            className="cursor-pointer"
+            className="cursor-pointer border-b"
           >
             <Link href={route("profile.edit")}>Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             asChild
-            className="cursor-pointer"
+            className="cursor-pointer w-full"
           >
             <Link
               href={route("logout")}

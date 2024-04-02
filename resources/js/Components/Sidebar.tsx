@@ -23,7 +23,7 @@ function Sidebar({
     <aside
       className={cn(
         className,
-        "w-0 md:w-60 lg:w-72 transition-all sticky top-16 md:block"
+        "w-0 md:w-48 lg:w-56 transition-all sticky top-16 md:block"
       )}
     >
       <ScrollArea className="h-[calc(100vh-3.5rem)] shrink-0 py-4 px-6 lg:px-8 hidden md:grid md:grid-flow-row">
