@@ -29,24 +29,25 @@ function FormModal({
 		action === "edit" && id != null
 			? route("users.update", id)
 			: route("users.store");
-	const { data, setData, post, put, processing, errors, reset } = useForm<{
-		id?: number | null;
-		name: string;
-		email: string;
-		password?: string | null;
-	}>({
-		id: null,
-		name: "",
-		email: "",
-		password: "",
-	});
+
+	const { data, setData, post, put, clearErrors, processing, errors, reset } =
+		useForm<{
+			id?: number | string | null;
+			name: string;
+			email: string;
+			password?: string | null;
+		}>({
+			id: null,
+			name: "",
+			email: "",
+			password: "",
+		});
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (action === "edit" && id != null) {
 			setLoading(true);
 			axios.get(route("users.edit", id)).then((response) => {
-				console.log(response.data.name);
 				setData({
 					name: response.data.name,
 					email: response.data.email,
@@ -60,6 +61,8 @@ function FormModal({
 		e.preventDefault();
 		const method = action === "edit" ? put : post;
 		method(url, {
+			preserveScroll: true,
+			preserveState: true,
 			onSuccess: () => {
 				handleClose();
 			},
@@ -68,6 +71,8 @@ function FormModal({
 
 	const handleClose = () => {
 		reset();
+		clearErrors();
+		console.log("reset");
 		setFormAction({
 			open: false,
 			action: action,
@@ -99,6 +104,11 @@ function FormModal({
 								value={data.name}
 								onChange={(e) => setData("name", e.target.value)}
 							/>
+							{errors.name && (
+								<div className="text-red-600 text-xs mt-2 font-semibold">
+									{errors.name}
+								</div>
+							)}
 						</div>
 						<div className="space-y-1">
 							<Label htmlFor="email">Email</Label>
@@ -108,6 +118,11 @@ function FormModal({
 								value={data.email}
 								onChange={(e) => setData("email", e.target.value)}
 							/>
+							{errors.email && (
+								<div className="text-red-600 text-xs mt-2 font-semibold">
+									{errors.email}
+								</div>
+							)}
 						</div>
 
 						{action === "create" && (
@@ -121,7 +136,7 @@ function FormModal({
 							</div>
 						)}
 
-						<div className="pt-2">
+						<div className="pt-2 flex justify-end">
 							<Button type="submit" disabled={processing}>
 								{processing && <Loader className="animate-spin w-4 mr-2" />}
 								Simpan
@@ -159,7 +174,7 @@ function FormSkeleton({ action }: { action: string }) {
 					</div>
 				</div>
 			)}
-			<div className="space-y-2 w-full">
+			<div className="flex justify-end w-full">
 				<Skeleton className="h-9 w-2/12" />
 			</div>
 		</div>

@@ -1,38 +1,38 @@
 import { Button } from "@/Components/ui/button";
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/Components/ui/dialog";
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/Components/ui/alert-dialog";
+
 import { useForm } from "@inertiajs/react";
-import { Loader, Trash2 } from "lucide-react";
-import { type FormEvent, useEffect, useState } from "react";
+import { Loader } from "lucide-react";
+import type { FormEvent, Dispatch, SetStateAction } from "react";
 
-function DeleteModal({ id }: { id: number | null }) {
-	const [open, setOpen] = useState<boolean>(false);
-
+function DeleteModal({
+	label = null,
+	open,
+	setOpen,
+	id,
+}: {
+	label?: string | null;
+	open: boolean;
+	setOpen: Dispatch<SetStateAction<boolean>>;
+	id: number | string | null;
+}) {
 	const { delete: destroy, data, processing } = useForm();
-
-	useEffect(() => {
-		if (id !== null && typeof id === "number") {
-			setOpen(true);
-		}
-	}, [id]);
-
-	const handleClose = () => {
-		setOpen(false);
-	};
 
 	const handleDestroy = (e: FormEvent) => {
 		e.preventDefault();
-		console.log("destroy");
 		if (id) {
 			destroy(route("users.destroy", id), {
 				onSuccess: () => {
-					console.log("success");
 					setOpen(false);
 				},
 			});
@@ -40,25 +40,34 @@ function DeleteModal({ id }: { id: number | null }) {
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={handleClose}>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle className="text-destructive">
-						Are you absolutely sure?
-					</DialogTitle>
-					<DialogDescription>
-						This action cannot be undone. This will permanently delete your
-						account and remove your data from our servers.
-					</DialogDescription>
-					<form onSubmit={handleDestroy} className="pt-4">
+		<AlertDialog open={open} onOpenChange={setOpen}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>
+						{label
+							? `Apakah Anda benar-benar yakin ingin menghapus ${label}?`
+							: "Apakah Anda benar-benar yakin?"}
+					</AlertDialogTitle>
+					<AlertDialogDescription>
+						Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data
+						tersebut secara permanen.
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<AlertDialogFooter>
+					<AlertDialogCancel>Batal</AlertDialogCancel>
+					<form onSubmit={handleDestroy}>
 						<Button variant="destructive" disabled={processing}>
 							{processing && <Loader className="w-4 animate-spin mr-2" />}
-							Yes, Delete
+							Ya, Hapus
 						</Button>
 					</form>
-				</DialogHeader>
-			</DialogContent>
-		</Dialog>
+					{/* <AlertDialogAction>
+						{processing && <Loader className="w-4 animate-spin mr-2" />}
+						Ya, Hapus
+					</AlertDialogAction> */}
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 }
 

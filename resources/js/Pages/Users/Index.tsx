@@ -31,11 +31,12 @@ import CreateButton from "./CreateButton";
 import FormModal from "./FormModal";
 import DeleteButton from "./DeleteModal";
 import DeleteModal from "./DeleteModal";
+import { TooltipWrapper } from "@/Components/TooltipWrapper";
 
 export type UseFormActionProps = {
 	open: boolean;
 	action: "edit" | "create";
-	id: number | null | undefined;
+	id?: number | string | null | undefined;
 };
 function Index({
 	auth,
@@ -51,7 +52,9 @@ function Index({
 		id: null,
 	});
 
-	const [deleteId, setDeleteId] = useState<number | null>(null);
+	const [deleteId, setDeleteId] = useState<number | string | null>(null);
+	const [openDelete, setOpenDelete] = useState<boolean>(false);
+	const [labelDelete, setLabelDelete] = useState<string | null>(null);
 
 	const handleSearch: KeyboardEventHandler<HTMLInputElement> = (event) => {
 		if (event.key !== "Enter") return;
@@ -71,7 +74,7 @@ function Index({
 		});
 	};
 
-	const handleEdit = (id: number) => {
+	const handleEdit = (id: number | string) => {
 		setFormAction({
 			open: true,
 			action: "edit",
@@ -103,32 +106,53 @@ function Index({
 								<TableHead className="w-12">#</TableHead>
 								<TableHead className="w-60">Nama</TableHead>
 								<TableHead>Email</TableHead>
-								<TableHead className="w-28" />
+								<TableHead className="w-12" />
 							</TableRow>
 						</TableHeader>
 						<TableBody>
 							{users.data.map((user, index) => {
 								return (
-									<TableRow key={user.id}>
-										<TableCell>{index + users.meta.from}</TableCell>
-										<TableCell className="font-medium">{user.name}</TableCell>
-										<TableCell>{user.email}</TableCell>
+									<TableRow key={user.uuid}>
+										<TableCell
+											className="cursor-pointer"
+											onClick={() => handleEdit(user.uuid)}
+										>
+											{index + users.meta.from}
+										</TableCell>
+										<TableCell
+											className="cursor-pointer font-medium"
+											onClick={() => handleEdit(user.uuid)}
+										>
+											{user.name}
+										</TableCell>
+										<TableCell
+											className="cursor-pointer"
+											onClick={() => handleEdit(user.uuid)}
+										>
+											{user.email}
+										</TableCell>
 										<TableCell>
-											<div className="space-x-1">
-												<Button
+											<div className="flex gap-1">
+												{/* <Button
 													size={"icon"}
 													variant="outline"
-													onClick={() => handleEdit(user.id)}
+													onClick={() => handleEdit(user.uuid)}
 												>
 													<Pencil className="w-4" />
-												</Button>
-												<Button
-													onClick={() => setDeleteId(user.id)}
-													variant="outline"
-													size="icon"
-												>
-													<Trash2 className="w-4 text-destructive" />
-												</Button>
+												</Button> */}
+												<TooltipWrapper tooltip="Hapus">
+													<Button
+														onClick={() => {
+															setDeleteId(user.uuid);
+															setLabelDelete(user.name);
+															setOpenDelete(true);
+														}}
+														variant="outline"
+														size="icon"
+													>
+														<Trash2 className="w-4 text-destructive" />
+													</Button>
+												</TooltipWrapper>
 											</div>
 										</TableCell>
 									</TableRow>
@@ -157,7 +181,12 @@ function Index({
 				action={formAction.action}
 				setFormAction={setFormAction}
 			/>
-			<DeleteModal id={deleteId} />
+			<DeleteModal
+				open={openDelete}
+				label={labelDelete}
+				setOpen={setOpenDelete}
+				id={deleteId}
+			/>
 		</div>
 	);
 }
