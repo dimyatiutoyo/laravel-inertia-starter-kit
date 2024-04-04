@@ -2,33 +2,33 @@ import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "./ApplicationLogo";
 import { ModeToggle } from "./ui/mode-toggle";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle,
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuIndicator,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
+	NavigationMenuViewport,
+	navigationMenuTriggerStyle,
 } from "@/Components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
 import {
-  CalendarIcon,
-  CogIcon,
-  FolderIcon,
-  HomeIcon,
-  Menu,
-  UsersIcon,
+	CalendarIcon,
+	CogIcon,
+	FolderIcon,
+	HomeIcon,
+	Menu,
+	UsersIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import AvatarButton from "./AvatarButton";
@@ -37,32 +37,32 @@ import { PageProps, User } from "@/types";
 import { appendFile } from "fs";
 
 export default function NavbarResposive({
-  className,
-  menuItems = [],
+	className,
+	menuItems = [],
 }: {
-  className?: string;
-  menuItems: MenuItems[];
+	className?: string;
+	menuItems: MenuItems[];
 }) {
-  const page = usePage<PageProps<{ appName: string }>>();
+	const page = usePage<PageProps<{ appName: string }>>();
 
-  return (
-    <div
-      className={cn(
-        "sticky top-0 backdrop-blur-md border-b border-b-neutral-400 border-opacity-30 z-10",
-        className
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="h-14 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <div className="flex gap-2">
-              <MobileDrawer
-                appName={page.props.appName}
-                className="md:hidden"
-              />
-              <ApplicationLogo className="hidden md:block h-9 w-auto fill-current text-foreground" />
-            </div>
-            {/* <NavigationMenu className="hidden md:block">
+	return (
+		<div
+			className={cn(
+				"sticky top-0 backdrop-blur-md border-b border-b-neutral-400 border-opacity-30 z-10",
+				className,
+			)}
+		>
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div className="h-14 flex items-center justify-between">
+					<div className="flex items-center gap-8">
+						<div className="flex gap-2">
+							<MobileDrawer
+								appName={page.props.appName}
+								className="md:hidden"
+							/>
+							<ApplicationLogo className="hidden md:block h-9 w-auto fill-current text-foreground" />
+						</div>
+						{/* <NavigationMenu className="hidden md:block">
               <NavigationMenuList className="gap-0">
                 {menuItems.map((item, index) => (
                   <NavigationMenuItem key={item.name}>
@@ -82,49 +82,39 @@ export default function NavbarResposive({
                 ))}
               </NavigationMenuList>
             </NavigationMenu> */}
-          </div>
-          <div className="flex gap-1 items-center">
-            <ModeToggle />
-            <AvatarButton />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+					</div>
+					<div className="flex gap-1 items-center">
+						<ModeToggle />
+						<AvatarButton />
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 function MobileDrawer({
-  className,
-  appName,
+	className,
+	appName,
 }: {
-  className?: string;
-  appName: string;
+	className?: string;
+	appName: string;
 }) {
-  console.log(appName);
-  return (
-    <Sheet>
-      <SheetTrigger
-        asChild
-        className={className}
-      >
-        <Button
-          size="icon"
-          variant="ghost"
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="left"
-        className="overflow-y-auto"
-      >
-        <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <ApplicationLogo className="h-6 w-auto fill-current text-foreground" />
-            <span className="text-xl">{appName}</span>
-          </SheetTitle>
-        </SheetHeader>
-      </SheetContent>
-    </Sheet>
-  );
+	return (
+		<Sheet>
+			<SheetTrigger asChild className={className}>
+				<Button size="icon" variant="ghost">
+					<Menu className="h-5 w-5" />
+				</Button>
+			</SheetTrigger>
+			<SheetContent side="left" className="overflow-y-auto">
+				<SheetHeader>
+					<SheetTitle className="flex items-center gap-2">
+						<ApplicationLogo className="h-6 w-auto fill-current text-foreground" />
+						<span className="text-xl">{appName}</span>
+					</SheetTitle>
+				</SheetHeader>
+			</SheetContent>
+		</Sheet>
+	);
 }
