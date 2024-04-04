@@ -28,7 +28,7 @@ class UserController extends Controller
         $query = \App\Models\User::when(request('search'), function ($query, $search) {
           return $query->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%');
-        })->latest();
+        })->with('roles')->latest();
         return UserResource::collection($query->paginate(10)->withQueryString());
       }
     ]);
@@ -74,7 +74,8 @@ class UserController extends Controller
    */
   public function edit(User $user)
   {
-    return $user;
+    $user->load('roles');
+    return UserResource::make($user);
   }
 
   /**
@@ -88,7 +89,9 @@ class UserController extends Controller
         email: $request->email,
       );
 
-      $this->userService->update($userDto, $user);
+      $user = $this->userService->update($userDto, $user);
+
+      $user->syncRoles([$request->role]);
     } catch (\Throwable $th) {
       throw $th;
     }

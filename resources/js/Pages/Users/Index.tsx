@@ -32,6 +32,8 @@ import FormModal from "./FormModal";
 import DeleteButton from "./DeleteModal";
 import DeleteModal from "./DeleteModal";
 import { TooltipWrapper } from "@/Components/TooltipWrapper";
+import { Tab } from "@headlessui/react";
+import { Badge } from "@/Components/ui/badge";
 
 export type UseFormActionProps = {
 	open: boolean;
@@ -106,6 +108,7 @@ function Index({
 								<TableHead className="w-12">#</TableHead>
 								<TableHead className="w-60">Nama</TableHead>
 								<TableHead>Email</TableHead>
+								<TableHead>Roles</TableHead>
 								<TableHead className="w-12" />
 							</TableRow>
 						</TableHeader>
@@ -131,15 +134,24 @@ function Index({
 										>
 											{user.email}
 										</TableCell>
+										<TableCell
+											className="cursor-pointer"
+											onClick={() => handleEdit(user.uuid)}
+										>
+											{user.roles.map((role) => {
+												return (
+													<Badge
+														key={`role${role.name}`}
+														variant="secondary"
+														className="rounded-full"
+													>
+														{role.name}
+													</Badge>
+												);
+											})}
+										</TableCell>
 										<TableCell>
 											<div className="flex gap-1">
-												{/* <Button
-													size={"icon"}
-													variant="outline"
-													onClick={() => handleEdit(user.uuid)}
-												>
-													<Pencil className="w-4" />
-												</Button> */}
 												<TooltipWrapper tooltip="Hapus">
 													<Button
 														onClick={() => {
