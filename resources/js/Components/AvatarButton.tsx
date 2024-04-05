@@ -11,6 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import type { User } from "@/types";
+import { Badge } from "./ui/badge";
 
 function AvatarButton({ user }: { user: User }) {
 	return (
@@ -21,8 +22,16 @@ function AvatarButton({ user }: { user: User }) {
 					<AvatarFallback>{user.name[0]}</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent className="w-40" align="end">
-				<DropdownMenuLabel>My Account</DropdownMenuLabel>
+			<DropdownMenuContent className="w-48" align="end">
+				<DropdownMenuLabel>
+					<span>{user.name}</span>
+					<Badge
+						className="p-1 text-xs rounded-full py-0 ml-1"
+						variant="secondary"
+					>
+						{user.roles[0].display_name}
+					</Badge>
+				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<DropdownMenuItem asChild className="cursor-pointer">

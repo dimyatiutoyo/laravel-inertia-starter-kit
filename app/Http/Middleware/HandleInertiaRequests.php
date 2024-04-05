@@ -30,11 +30,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        /** @var \App\Models\User */
+        $user = $request->user();
+        $user->load('roles');
         return [
             ...parent::share($request),
             'csrf_token' => csrf_token(),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
             ],
             'appName' => config('app.name') ?? null,
             'flash' => [
