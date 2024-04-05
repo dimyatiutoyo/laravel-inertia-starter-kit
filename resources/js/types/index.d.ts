@@ -5,6 +5,8 @@ export interface User {
 	email: string;
 	email_verified_at: string;
 	roles: Role[];
+	avatar_url?: string | null | undefined;
+	avatar_path?: string | null | undefined;
 }
 
 export interface Role {

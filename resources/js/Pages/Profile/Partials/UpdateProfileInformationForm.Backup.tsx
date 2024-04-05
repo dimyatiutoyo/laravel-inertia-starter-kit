@@ -1,4 +1,4 @@
-import { Link, useForm, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import { useEffect, useState, type FormEventHandler } from "react";
 import type { PageProps } from "@/types";
@@ -6,6 +6,7 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/Components/ui/card";
@@ -13,7 +14,32 @@ import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { Loader } from "lucide-react";
-import FileUpload from "@/Components/FileUpload";
+// Import React FilePond
+import * as FilePondBase from "filepond";
+import { FilePond, FilePondProps, registerPlugin } from "react-filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
+// Import the plugin styles
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+// Register the plugin
+FilePondBase.registerPlugin(FilePondPluginImagePreview);
+
+// Import the plugin code
+import FilePondPluginImageCrop from "filepond-plugin-image-crop";
+
+// Register the plugin
+FilePondBase.registerPlugin(FilePondPluginImageCrop);
+
+// Import the plugin code
+import FilePondPluginImageResize from "filepond-plugin-image-resize";
+
+// Register the plugin
+FilePondBase.registerPlugin(FilePondPluginImageResize);
+
+// Import FilePond styles
+import "filepond/dist/filepond.min.css";
+
 import type {
 	ActualFileObject,
 	FilePondFile,
@@ -81,64 +107,6 @@ export default function UpdateProfileInformation({
 				<CardContent>
 					<form onSubmit={submit} className="space-y-4">
 						<div className="space-y-1">
-							<div className="max-w-lg flex justify-center">
-								<div className="w-44">
-									<FileUpload
-										name="avatar"
-										allowImagePreview={true}
-										acceptedFileTypes={["image/*"]}
-										files={avatars as FilePondInitialFile[]}
-										stylePanelLayout="compact circle"
-										styleLoadIndicatorPosition="center bottom"
-										styleProgressIndicatorPosition="right bottom"
-										styleButtonRemoveItemPosition="left bottom"
-										styleButtonProcessItemPosition="right bottom"
-										allowMultiple={false}
-										setFiles={setAvatars}
-										onUpdateFiles={(fileItems) => {
-											// Set current file objects to this.state
-											setAvatars(fileItems.map((fileItem) => fileItem.file));
-											if (fileItems.length === 0) {
-												setData({
-													...data,
-													is_avatar_deleted: true,
-												});
-											}
-										}}
-										server={{
-											load: (source, load, error, progress, abort, headers) => {
-												const myRequest = new Request(source);
-												fetch(myRequest)
-													.then((res) => {
-														return res.blob();
-													})
-													.then(load);
-											},
-											headers: {
-												"X-CSRF-TOKEN": csrf_token,
-											},
-											process: {
-												url: route("profile.avatar.upload"),
-												method: "POST",
-												onload: (response): string | number => {
-													setData({
-														...data,
-														avatar_tmp: response,
-													});
-
-													return response;
-												},
-											},
-											revert: {
-												url: route("profile.avatar.revert"),
-												method: "DELETE",
-											},
-										}}
-									/>
-								</div>
-							</div>
-						</div>
-						<div className="space-y-1">
 							<Label htmlFor="name">Name</Label>
 							<Input
 								id="name"
@@ -194,6 +162,64 @@ export default function UpdateProfileInformation({
 							</div>
 						)}
 
+						<div className="space-y-1">
+							<Label htmlFor="avatar">Avatar</Label>
+							<div className="w-44">
+								<FilePond
+									name="avatar"
+									files={avatars as FilePondInitialFile[]}
+									allowImageCrop={true}
+									allowImageResize={true}
+									imageCropAspectRatio="1:1"
+									stylePanelLayout="compact circle"
+									styleLoadIndicatorPosition="center bottom"
+									styleProgressIndicatorPosition="right bottom"
+									styleButtonRemoveItemPosition="left bottom"
+									styleButtonProcessItemPosition="right bottom"
+									onupdatefiles={(fileItems) => {
+										// Set current file objects to this.state
+										setAvatars(fileItems.map((fileItem) => fileItem.file));
+										if (fileItems.length === 0) {
+											setData({
+												...data,
+												is_avatar_deleted: true,
+											});
+										}
+									}}
+									allowMultiple={false}
+									acceptedFileTypes={["image/*"]}
+									server={{
+										load: (source, load, error, progress, abort, headers) => {
+											const myRequest = new Request(source);
+											fetch(myRequest)
+												.then((res) => {
+													return res.blob();
+												})
+												.then(load);
+										},
+										headers: {
+											"X-CSRF-TOKEN": csrf_token,
+										},
+										process: {
+											url: route("profile.avatar.upload"),
+											method: "POST",
+											onload: (response): string | number => {
+												setData({
+													...data,
+													avatar_tmp: response,
+												});
+
+												return response;
+											},
+										},
+										revert: {
+											url: route("profile.avatar.revert"),
+											method: "DELETE",
+										},
+									}}
+								/>
+							</div>
+						</div>
 						<div className="flex gap-2 items-center">
 							<Button disabled={processing} type="submit">
 								{processing ? (

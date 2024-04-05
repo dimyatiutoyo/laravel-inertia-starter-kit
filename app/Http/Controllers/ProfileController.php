@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,12 +29,28 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request)
     {
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
+        }
+
+        if ($request->is_avatar_deleted == true) {
+            if ($request->user()->avatar_path != null) {
+                Storage::disk('public')->delete($request->user()->avatar_path);
+            }
+            $request->user()->avatar_path = null;
+        }
+
+
+        if ($request->get('avatar_tmp') != null) {
+
+            $newFilename = Str::after($request->input('avatar_tmp'), 'tmp/');
+            $dir = "avatars/$newFilename";
+            Storage::disk('public')->move($request->input('avatar_tmp'), $dir);
+            $request->user()->avatar_path = $dir;
         }
 
         $request->user()->save();
@@ -59,5 +77,19 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+
+    public function upload(Request $request)
+    {
+        if ($request->file('avatar')) {
+            $path = $request->file('avatar')->store('tmp', 'public');
+        }
+        return $path;
+    }
+
+    public function revert(Request $request)
+    {
+        Storage::disk('public')->delete($request->getContent());
     }
 }

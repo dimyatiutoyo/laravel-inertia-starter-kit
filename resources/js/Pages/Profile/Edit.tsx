@@ -3,47 +3,48 @@ import DeleteUserForm from "./Partials/DeleteUserForm";
 import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
 import { Head } from "@inertiajs/react";
-import { PageProps, User } from "@/types";
+import { type PageProps, User } from "@/types";
 import { KeyRound } from "lucide-react";
-import { ReactElement, ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 function Edit({
-  auth,
-  mustVerifyEmail,
-  status,
+	auth,
+	mustVerifyEmail,
+	status,
 }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
-  return (
-    <>
-      <Head title="Profile" />
+	return (
+		<>
+			<Head title="Profile" />
 
-      <div>
-        <div className="row-span-1 md:col-span-9 flex flex-col gap-6">
-          <UpdateProfileInformationForm
-            mustVerifyEmail={mustVerifyEmail}
-            status={status}
-          />
+			<div>
+				<div className="row-span-1 md:col-span-9 flex flex-col gap-6">
+					<UpdateProfileInformationForm
+						mustVerifyEmail={mustVerifyEmail}
+						status={status}
+					/>
 
-          <UpdatePasswordForm />
+					<UpdatePasswordForm />
 
-          <DeleteUserForm />
-        </div>
-      </div>
-    </>
-  );
+					<DeleteUserForm />
+				</div>
+			</div>
+		</>
+	);
 }
 
 Edit.layout = (page: ReactElement<PageProps>) => {
-  return (
-    <AuthenticatedLayout
-      user={page.props.auth.user}
-      header={
-        <h2 className="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
-          Profile
-        </h2>
-      }
-      children={page}
-    />
-  );
+	return (
+		<AuthenticatedLayout
+			user={page.props.auth.user}
+			header={
+				<h2 className="font-semibold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+					Profile
+				</h2>
+			}
+		>
+			{page}
+		</AuthenticatedLayout>
+	);
 };
 
 export default Edit;

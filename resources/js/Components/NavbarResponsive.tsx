@@ -32,9 +32,8 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import AvatarButton from "./AvatarButton";
-import { MenuItems } from "@/types/menu_items";
-import { PageProps, User } from "@/types";
-import { appendFile } from "fs";
+import type { MenuItems } from "@/types/menu_items";
+import type { PageProps, User } from "@/types";
 
 export default function NavbarResposive({
 	className,
@@ -44,6 +43,7 @@ export default function NavbarResposive({
 	menuItems: MenuItems[];
 }) {
 	const page = usePage<PageProps<{ appName: string }>>();
+	const user = page.props.auth.user as User;
 
 	return (
 		<div
@@ -85,7 +85,7 @@ export default function NavbarResposive({
 					</div>
 					<div className="flex gap-1 items-center">
 						<ModeToggle />
-						<AvatarButton />
+						<AvatarButton user={user} />
 					</div>
 				</div>
 			</div>
